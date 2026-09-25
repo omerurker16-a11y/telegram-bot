@@ -230,10 +230,27 @@ async def handle_document(update: Update, context: ContextTypes.DEFAULT_TYPE):
         logging.error(f"Hata: {e}")
         await msg.edit_text(f"❌ İşlem sırasında bir hata oluştu: {str(e)}")
 
-if __name__ == '__main__':
-    app = ApplicationBuilder().token(TOKEN).build()
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(MessageHandler(filters.Document.ALL, handle_document))
-    
-    print("🚀 Bot başarıyla başlatıldı ve 7/24 çalışıyor!")
-    app.run_polling(allowed_updates=Update.ALL_TYPES)
+if __name__ == "__main__":
+    from flask import Flask
+    from threading import Thread
+
+    if not TOKEN:
+        raise SystemExit("BOT_TOKEN ortam degiskeni yok. Render > Environment'dan ekleyin.")
+
+    web = Flask(__name__)
+
+    @web.route("/")
+    def health():
+        return "Bot calisiyor", 200
+
+    def run_web():
+        port = int(os.environ.get("PORT", 10000))
+        web.run(host="0.0.0.0", port=port)
+
+    Thread(target=run_web, daemon=True).start()
+
+    application = ApplicationBuilder().token(TOKEN).build()
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(MessageHandler(filters.Document.ALL, handle_document))
+    print("Bot basariyla baslatildi ve 7/24 calisiyor!")
+    application.run_polling(allowed_updates=Update.ALL_TYPES, drop_pending_updates=True)
