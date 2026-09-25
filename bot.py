@@ -10,7 +10,7 @@ from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, Messa
 import os
 
 # Bot Token'ı (Render'da çevre değişkeninden alacak)
-TOKEN = os.environ.get("BOT_TOKEN", "8963450215:AAFfrUxbFbJ27XCAVymC6pADmR6a7rZgsXc")
+TOKEN = os.environ.get("BOT_TOKEN", "8963450215:AAGpTot613JEtzVMN2bjdHg1MC-xCPRvt40")
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
